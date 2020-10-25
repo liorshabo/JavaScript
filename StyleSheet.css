@@ -1,0 +1,21 @@
+﻿body {
+    background-color: lavenderblush;
+}
+
+h2 {
+    color : darkmagenta;
+}
+
+img {
+
+    height: 100px;
+}
+
+td {
+    height: 200px;
+    width: 200px;
+    border: 2px solid darkmagenta;
+    padding: 0px;
+    margin: 0px;
+    text-align: center;
+}

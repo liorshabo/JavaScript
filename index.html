@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="amsterdam.js"></script>
+
+    <script src="utils.js"></script>
+    <script>
+     
+        console.log(amsterdam);
+
+        
+    </script>
+    <link href="StyleSheet.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="container">
+        <div id="ph1"></div>
+        <div id="ph2"></div>
+        <div id="ph3"></div>
+    </div>
+    <script>
+        weather =[];
+        lenMon = amsterdam.results[0].climate.temperature.average_max.months.length;
+        for (var i = 0; i < lenMon; i++) {
+            let k = new Object();
+            k.month = (i + 1);
+            k.maxTemp = amsterdam.results[0].climate.temperature.average_max.months[i];
+            k.minTemp = amsterdam.results[0].climate.temperature.average_min.months[i];
+            weather[weather.length] = k;
+            
+        }
+        printTemp(weather, "ph1");
+
+        printFestival(amsterdam.results[0].structured_content.sections[3].sections[1].topics, "ph2");
+
+        printImg(amsterdam.results[0].images, "ph3");
+
+
+       
+        function printImg(arr, div) {
+            str = "<h2> Photos: </h2> <table>";
+            str += "<tr>";
+                for (var j = 0; j < arr.length; j++) {
+
+                    if (j == arr.length/2)
+                        str += "</tr> <tr>"
+
+                    str += "<td><a href='" + arr[j].source_url + "'>" + arr[j].caption + "</a></td>";
+                    
+                }
+            str += "</tr> </table >";
+
+            writeToDiv(div, str, false);
+        }
+
+
+        function printFestival (arr, div) {
+            str = "<h2> Festival data: </h2> ";
+            for (var i = 0; i < arr.length; i++) {
+                str += arr[i].body; 
+            }
+            writeToDiv(div, str, false);
+        }
+
+        function printTemp(weather, div) {
+            coldest = coldestTemp(weather);
+            hotest = hotestTemp(weather);
+            str = "<h2> Weather data: </h2>";
+            str += "<p>"
+            for (var i = 0; i < weather.length; i++) {
+                if (weather[i].month == coldest.month)
+                    str += " <strong> month: " + weather[i].month + "</strong> , max temperature: " + weather[i].maxTemp + ", <strong> min temperature: " + weather[i].minTemp + "</strong> ";
+                else if (weather[i].month == hotest.month)
+                    str += " <strong> month: " + weather[i].month + ", max temperature: " + weather[i].maxTemp + ",</strong> min temperature: " + weather[i].minTemp + " ";
+                else 
+                    str += "month: " + weather[i].month + " , max temperature: " + weather[i].maxTemp + " , min temperature: " + weather[i].minTemp + " ";
+
+                str += "<br />"
+                
+            }
+          
+            writeToDiv(div, str + "</p>", true);
+        }
+
+        
+        function coldestTemp(weather)
+        {
+            coldest = weather[0];
+            for (var i = 1; i < weather.length; i++) {
+         
+                if (weather[i].minTemp < coldest.minTemp)
+                    coldest = weather[i];             
+            }
+            return coldest; 
+        }
+        
+
+        function hotestTemp(weather) {
+
+            hotest = weather[0];
+            for (var i = 1; i < weather.length; i++) {
+                if (weather[i].maxTemp > hotest.maxTemp) 
+                    hotest = weather[i];
+              
+            }
+            return hotest;
+        }
+
+        /*
+        function estTemp(weather, div) {
+
+            hotest = weather[0];
+            coldest = weather[0];
+            for (var i = 1; i < weather.length; i++) {
+                if (weather[i].maxTemp > hotest.maxTemp) {
+                    hotest = weather[i];
+                }
+                if (weather[i].minTemp < coldest.minTemp) {
+                    coldest = weather[i];
+                }
+            }
+            writeToDiv(div, "<h2> the hotest month is: " + hotest.month + " with temperature: " + hotest.maxTemp + "</h2> <h2>the coldest month is: " + coldest.month + " with temperature: " + coldest.minTemp)
+       
+       }
+       */
+
+    </script>
+</body>
+</html>
